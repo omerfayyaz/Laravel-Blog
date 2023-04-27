@@ -21,8 +21,18 @@ class CommentStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'body' => ['required', 'string'],
-        ];
+        if (auth()->user())
+        {
+            return [
+                'body' => ['required', 'string'],
+            ];
+        }
+        else
+        {
+            return [
+                'user_name' => ['required', 'string', 'max:255'],
+                'body' => ['required', 'string'],
+            ];
+        }
     }
 }

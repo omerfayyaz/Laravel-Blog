@@ -10,25 +10,23 @@ use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(CommentStoreRequest $request, Post $post)
     {
         //Validation
         //Used CommentStoreRequest class for validation.
+
+        if (auth()->user())
+        {
+            $request['user_name'] = auth()->user()->name;
+        }
 
         DB::beginTransaction();
         try {
 
             $comment = Comment::create([
                 'post_id' => $post->id,
-                'user_name' => auth()->user()->name,
+                'user_name' => $request->user_name,
                 'body' => $request->body,
             ]);
 

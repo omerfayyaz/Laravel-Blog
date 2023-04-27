@@ -51,28 +51,32 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6 mt-12">
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
 
-                @if (auth()->user())
-                    <form method="post" action="{{ route('comments.store', $post?->id) }}" class="mt-6 mb-10 space-y-6">
-                        @csrf
+                {{-- @if (auth()->user()) --}}
+                <form method="post" action="{{ route('comments.store', $post?->id) }}" class="mt-6 mb-10 space-y-6">
+                    @csrf
 
-                        <div class="flex justify-between">
-                            <h1 class="text-xl font-bold text-gray-900">
-                                Comments
-                            </h1>
+                    <div class="flex justify-between">
+                        <h1 class="text-xl font-bold text-gray-900">
+                            Comments
+                        </h1>
 
-                            <x-primary-button>{{ __('Save Comment') }}</x-primary-button>
-                        </div>
+                        <x-primary-button>{{ __('Save Comment') }}</x-primary-button>
+                    </div>
 
+                    @if (!auth()->user())
                         <div>
-                            <x-text-area id="body" name="body" type="text" class="mt-1 block w-full" :text_value="old('body')" autofocus autocomplete="body" style="min-height: 100px;" />
-                            <x-input-error class="mt-2" :messages="$errors->get('body')" />
+                            <x-input-label for="user_name" :value="__('Name')" />
+                            <x-text-input id="user_name" name="user_name" type="text" class="mt-1 block w-full" :value="old('user_name')" autofocus autocomplete="user_name" />
+                            <x-input-error class="mt-2" :messages="$errors->get('user_name')" />
                         </div>
-                    </form>
-                @else
-                    <h1 class="text-xl font-bold text-gray-900 mb-4">
-                        Comments
-                    </h1>
-                @endif
+                    @endif
+
+                    <div>
+                        <x-input-label for="body" :value="__('Comment')" />
+                        <x-text-area id="body" name="body" type="text" class="mt-1 block w-full" :text_value="old('body')" autofocus autocomplete="body" style="min-height: 100px;" />
+                        <x-input-error class="mt-2" :messages="$errors->get('body')" />
+                    </div>
+                </form>
 
                 @forelse ($post?->comments as $comment)
                     <div class="mb-6">
