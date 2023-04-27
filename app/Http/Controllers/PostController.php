@@ -18,9 +18,15 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::orderBy('id', 'desc')->paginate(10);
+        $posts = Post::orderBy('id', 'DESC')
+            ->when($request->search, function ($query) use ($request) {
+                $query->where('title', "like", "%" . $request->search . "%")
+                    ->orWhere('body', "like", "%" . $request->search . "%");
+            })
+            ->paginate(10);
+
         return view('posts.index', get_defined_vars());
     }
 
@@ -70,8 +76,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        if ($post->user_id != auth()->id())
-        {
+        if ($post->user_id != auth()->id()) {
             abort(403, 'You are not allowed to edit this post.');
         }
 
@@ -86,8 +91,7 @@ class PostController extends Controller
         //Validation
         //Used PostUpdateRequest class for validation.
 
-        if ($post->user_id != auth()->id())
-        {
+        if ($post->user_id != auth()->id()) {
             abort(403, 'You are not allowed to edit this post.');
         }
 
@@ -111,8 +115,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        if ($post->user_id != auth()->id())
-        {
+        if ($post->user_id != auth()->id()) {
             abort(403, 'You are not allowed to delete this post.');
         }
 

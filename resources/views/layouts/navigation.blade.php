@@ -5,15 +5,15 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('blog-home') }}">
-                        {{-- <x-application-logo class="block h-9 w-auto fill-current text-gray-800" /> --}}
-                        <h1 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Laravel Blog') }}</h1>
+                    <a href="{{ route('blog-home') }}" class="flex items-center gap-4">
+                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                        <h1 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('My Laravel Blog') }}</h1>
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('blog-home')" :active="request()->routeIs('blog-home')">
+                    <x-nav-link :href="route('posts.index')" :active="request()->routeIs('posts.index')">
                         {{ __('Home') }}
                     </x-nav-link>
                 </div>

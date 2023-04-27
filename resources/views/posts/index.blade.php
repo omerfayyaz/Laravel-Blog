@@ -8,20 +8,31 @@
     <x-message></x-message>
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="mt-16 pb-16" style="display: flex; flex-direction: column;">
+        <div class="mt-10 pb-16" style="display: flex; flex-direction: column;">
 
-            @if (auth()->user())
-                <div>
-                    <a href="{{ route('posts.create') }}" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-6 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                        style="float: right;">Create New Post</a>
+            <form method="get" action="{{ route('posts.index') }}" class="flex items-center gap-4 mb-10">
+
+                <div style="flex: 1;">
+                    <x-text-input id="search" name="search" type="text" class="block w-full" :value="$request->search" autofocus placeholder="Search Here" />
                 </div>
-            @endif
+
+
+                <div class="flex items-center gap-4">
+                    <x-primary-button text_size="text-sm">{{ __('Search') }}</x-primary-button>
+                </div>
+
+                @if (auth()->user())
+                    <div class="flex items-center gap-4">
+                        <x-link-button href="{{ route('posts.create') }}" text_size="text-sm">{{ __('Create New Post') }}</x-link-button>
+                    </div>
+                @endif
+            </form>
+
+
 
             <div class="grid grid-cols-1 {{ count($posts) ? 'md:grid-cols-2' : 'md:grid-cols-1' }} gap-6 lg:gap-8">
-
                 @forelse ($posts as $post)
-                    <a href="{{ route('posts.show', $post->id) }}"
-                        class="scale-100 p-6 bg-white dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500">
+                    <x-post-card href="{{ route('posts.show', $post->id) }}">
                         <div>
                             <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">{{ $post?->title }}</h2>
                             <h3 class="text-sm font-bold text-gray-900">
@@ -32,19 +43,16 @@
                                 {{ Str::length($post?->body) > 300 ? Str::limit($post?->body, 300) . '.....' : $post?->body }}
                             </p>
                         </div>
-                    </a>
+                    </x-post-card>
                 @empty
-                    <a href="javascript:void(0)"
-                        class="scale-100 p-6 bg-white dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500">
+                    <x-post-card href="javascript:void(0)">
                         <div>
                             <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">No Post Found</h2>
 
-                            <p class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                            </p>
+                            <p class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed"></p>
                         </div>
-                    </a>
+                    </x-post-card>
                 @endforelse
-
             </div>
 
             <div class="mt-5">
@@ -52,7 +60,5 @@
             </div>
 
         </div>
-
     </div>
-
 </x-app-layout>

@@ -12,29 +12,31 @@
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <div>
                     <section>
-                        <header class="flex justify-between">
-                            <div>
+                        <header class="">
+                            <div class="flex justify-between">
                                 <h1 class="text-3xl font-bold text-gray-900">
                                     {{ $post?->title }}
                                 </h1>
-                                <h3 class="text-base font-bold text-gray-900">
-                                    Author: {{ $post?->user?->name }} | Date & Time: {{ $post->created_at ? date('Y-m-d h:i A', strtotime($post->created_at)) : '' }}
-                                </h3>
+
+                                @if (auth()->user() && auth()->id() == $post?->user_id)
+                                    <div class="flex gap-4">
+
+                                        <x-link-button href="{{ route('posts.edit', $post?->id) }}">{{ __('Edit Post') }}</x-link-button>
+
+                                        <form method="POST" action="{{ route('posts.destroy', $post?->id) }}">
+                                            @csrf
+                                            @method('delete')
+
+                                            <x-danger-button>{{ __('Delete Post') }}</x-danger-button>
+                                        </form>
+                                    </div>
+                                @endif
                             </div>
 
-                            @if (auth()->user() && auth()->id() == $post?->user_id)
-                                <div class="flex">
+                            <h3 class="text-base font-bold text-gray-900">
+                                Author: {{ $post?->user?->name }} | Date & Time: {{ $post->created_at ? date('Y-m-d h:i A', strtotime($post->created_at)) : '' }}
+                            </h3>
 
-                                    <a href="{{ route('posts.edit', $post?->id) }}" type="button"
-                                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-6 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit Post</a>
-                                    <form method="POST" action="{{ route('posts.destroy', $post?->id) }}">
-                                        @csrf
-                                        @method('delete')
-
-                                        <button type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-6 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">Delete Post</button>
-                                    </form>
-                                </div>
-                            @endif
                         </header>
 
                         <p class="mt-4 text-gray-500 dark:text-gray-400 text-lg leading-relaxed">
