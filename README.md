@@ -77,6 +77,20 @@ php artisan db:seed
 
 ## PHPUnit Testing
 
+In the PHPUnit.xml file, it is congigured to run test using sqlite driver.
+
+```php
+<env name="DB_CONNECTION" value="sqlite"/>
+<env name="DB_DATABASE" value=":memory:"/>
+```
+
+If your development environment does not support sqlite, creaet a seperate mysql database for running tests and do the necessary configuration in PHPUnit.xml file.
+
+```php
+<env name="DB_CONNECTION" value="mysql"/>
+<env name="DB_DATABASE" value="database_name"/>
+```
+
 Run the following command to perform the testing.
 
 ```bash
