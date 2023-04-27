@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-xl text-gray-800 leading-tight">
-            {{ __('Blog->Create New Post') }}
+            {{ __('Blog Home -> Create New Post') }}
         </h2>
     </x-slot>
 
@@ -32,7 +32,6 @@
                                 <x-text-area id="body" name="body" type="text" class="mt-1 block w-full" :text_value="old('body')" autofocus autocomplete="body" style="min-height: 150px;" />
                                 <x-input-error class="mt-2" :messages="$errors->get('body')" />
                             </div>
-
 
                             <div class="flex items-center gap-4">
                                 <x-primary-button>{{ __('Save') }}</x-primary-button>

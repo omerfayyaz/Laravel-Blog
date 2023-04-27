@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-xl text-gray-800 leading-tight">
-            {{ __('Blog') }}
+            {{ __('Blog Home') }}
         </h2>
     </x-slot>
 
@@ -27,8 +27,6 @@
                     </div>
                 @endif
             </form>
-
-
 
             <div class="grid grid-cols-1 {{ count($posts) ? 'md:grid-cols-2' : 'md:grid-cols-1' }} gap-6 lg:gap-8">
                 @forelse ($posts as $post)
