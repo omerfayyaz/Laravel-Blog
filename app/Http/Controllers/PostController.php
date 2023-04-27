@@ -38,7 +38,7 @@ class PostController extends Controller
     public function store(PostStoreRequest $request)
     {
         //Validation
-        //User PostStoreRequest class for validation.
+        //Used PostStoreRequest class for validation.
 
         DB::beginTransaction();
         try {
@@ -70,6 +70,11 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        if ($post->user_id != auth()->id())
+        {
+            abort(403, 'You are not allowed to edit this post.');
+        }
+
         return view('posts.edit', get_defined_vars());
     }
 
@@ -79,7 +84,12 @@ class PostController extends Controller
     public function update(PostUpdateRequest $request, Post $post)
     {
         //Validation
-        //User PostUpdateRequest class for validation.
+        //Used PostUpdateRequest class for validation.
+
+        if ($post->user_id != auth()->id())
+        {
+            abort(403, 'You are not allowed to edit this post.');
+        }
 
         DB::beginTransaction();
         try {
@@ -101,6 +111,11 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        if ($post->user_id != auth()->id())
+        {
+            abort(403, 'You are not allowed to delete this post.');
+        }
+
         DB::beginTransaction();
         try {
 

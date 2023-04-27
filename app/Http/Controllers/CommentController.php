@@ -2,64 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentStoreRequest;
 use App\Models\Comment;
+use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $this->middleware('auth');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CommentStoreRequest $request, Post $post)
     {
-        //
-    }
+        //Validation
+        //Used CommentStoreRequest class for validation.
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Comment $comment)
-    {
-        //
-    }
+        DB::beginTransaction();
+        try {
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Comment $comment)
-    {
-        //
-    }
+            $comment = Comment::create([
+                'post_id' => $post->id,
+                'user_name' => auth()->user()->name,
+                'body' => $request->body,
+            ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Comment $comment)
-    {
-        //
+            DB::commit();
+            return redirect()->route('posts.show', $post->id)->with('success', 'The new comment submitted successfully.');
+        } catch (\Exception  $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'The new comment submission was unsuccessful. Error: ' . $e->getMessage());
+        }
     }
 }
